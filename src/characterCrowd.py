@@ -39,6 +39,15 @@ class CharacterCrowd:
                 node=item
                 )
 
+        self.melSettings()
+
+    def melSettings(self):
+        """
+        Set pre and post render mel settings
+        """
+        pm.setAttr('defaultRenderGlobals.preRenderMel', 'ccPreRenderFrame()')
+        pm.setAttr('defaultRenderGlobals.postRenderMel', 'ccPostRenderFrame()')
+
     def load(self):
         """
         Loads the source from the selected item
