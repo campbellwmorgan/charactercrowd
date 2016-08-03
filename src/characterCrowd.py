@@ -112,6 +112,13 @@ class CharacterCrowd:
         standIn.focus()
         standIn.cache()
 
+    def duplicateStandin(self, *args):
+        """
+        Duplicate the selected standin
+        """
+        standIn = self.getStandInFromSelection()
+        newStandin = standIn.duplicate()
+
     def deleteItem(self, *args):
         """
         Deletes the standin and removes references
@@ -149,6 +156,7 @@ class CharacterCrowd:
             load=self.load,
             generate=self.generate,
             delete=self.deleteItem,
+            duplicate=self.duplicateStandin,
             editCurrent=self.focusModel,
             saveCurrent=self.saveState,
             selectChildren=self.selectChildren,

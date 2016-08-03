@@ -9,6 +9,7 @@ class Gui:
             setup=empty,
             load=empty,
             generate=empty,
+            duplicate=empty,
             delete=empty,
             editCurrent=empty,
             saveCurrent=empty,
@@ -24,6 +25,8 @@ class Gui:
         self.generateFunc = generate
         # deletes the selected instance of the current item
         self.deleteFunc = delete
+        # duplicate standin
+        self.duplicateFunc = duplicate
         # moves the mesh to the location
         # of the current instance and updates mesh's data
         # according to cache
@@ -175,6 +178,7 @@ class Gui:
 
         pm.button(l="Edit Selected Stand-in", p=parentLayout,h=20,w=width, command=self.editCurrentFunc)
         pm.button(l="Save Selected Stand-in", p=parentLayout,h=20,w=width, command=self.saveCurrentFunc)
+        pm.button(l="Duplicate Selected Stand-in", p=parentLayout,h=20,w=width, command=self.duplicateFunc)
         pm.button(l="Select All Stan-ins ", p=parentLayout,h=20,w=width, command=self.selectChildrenFunc)
         pm.button(l="Cache Selected", p=parentLayout,h=20,w=width, command=self.cacheSelectedFunc)
 

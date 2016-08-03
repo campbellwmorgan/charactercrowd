@@ -56,6 +56,28 @@ class StandIn:
         pm.select(self.node)
         return self.node
 
+    def duplicate(self):
+        """
+        Creates a copy of itself that can be
+        manipulated
+
+        return new instance of StandIn
+        """
+        dupe = pm.duplicate(self.node)[0]
+        newName = dupe.name()
+        self.source.addChild(newname)
+        self.coreNode.addChild(newname)
+        newStandin = StandIn(
+                coreNode=self.coreNode,
+                source=self.source,
+                node=dupe,
+                ctrlName=self.ctrlName
+                )
+        newStandin.storeMeta()
+        newStandin.sourceKeyTransforms()
+        pm.select(dupe)
+        return newStandin
+
     def delete(self):
         """
         Deletes the stand-in
@@ -150,6 +172,7 @@ class StandIn:
                 self.node,
                 self.snapshotName
                 )
+
         # set snapshot
         self.source.loadSnapshot(snapshot)
         # transfer core transforms
