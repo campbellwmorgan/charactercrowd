@@ -164,11 +164,35 @@ class CoreNode:
         for attr, data in attrHash.iteritems():
             pm.setAttr(attr, data["value"])
 
+    def forceDGEval(self, mesh):
+        """
+        Finds any connections to the relatives
+        of the mesh and gets the attribute
+        to trigger DG evaluation of connections
+        FIXME Must be faster way of doing this!!
+        """
+        relatives = pm.listRelatives(mesh,c=1)
+        relatives.append(mesh)
+        for m in relatives:
+            conns = pm.listConnections(m, d=0,s=1,p=1)
+            if not len(conns):
+                continue
+            # now iterate through connections getting reverse
+            for con in conns:
+                revs = pm.listConnections(con, d=1,s=0,p=1)
+                for rev in revs:
+                    # get attribute to force update
+                    pm.getAttr(rev)
+
+
     def duplicateMeshes(self, meshes):
+        #pm.dgeval('meshDShape.testAttr')
         for mesh in meshes:
             if not pm.objExists(mesh):
                 print("Mesh " + mesh + " not found. Skipped")
                 continue
+            self.forceDGEval(mesh)
+            # now duplicate
             dupe = pm.duplicate(mesh)[0]
             # add to mesh group
             pm.parent(dupe, self.meshGroup)

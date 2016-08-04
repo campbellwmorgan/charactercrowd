@@ -42,17 +42,17 @@ class testCharacterCrowd:
 
     def testASetup(self):
         meshes = [
-                "mesh1",
-                "mesh2",
-                "mesh3",
-                "mesh4"
+                "meshA",
+                "meshB",
+                "meshC",
+                "meshD"
                 ]
         self.meshes = pm.ls(meshes)
         keyable = [
-                "controller1",
-                "controller2",
-                "controller3",
-                "controller4",
+                "controllerA",
+                "controllerB",
+                "controllerC",
+                "controllerD",
                 "main",
                 ]
         self.keyableNodes = pm.ls(keyable)
@@ -84,16 +84,19 @@ class testCharacterCrowd:
         self.standIn = pm.ls('testStandin_standInCtrl')[0]
         # add some keys to the controllers
         # and change some transforms
-        contr1 = pm.ls('controller1')[0]
+        contr1 = pm.ls('controllerA')[0]
         contr1.rotate.set((0,90,0))
         contr1.translate.set((5,3,2))
-        pm.setKeyframe('controller1.scaleX', t=1, v=1.3)
-        pm.setKeyframe('controller1.scaleX', t=5, v=1.9)
+        pm.setKeyframe('controllerA.scaleX', t=1, v=1.3)
+        pm.setKeyframe('controllerA.scaleX', t=5, v=1.9)
+        # custom connected attribute
+        # for testing dependency graph evaluations
+        pm.setKeyframe('controllerB.testSrc', t=1, v=0.5)
         pm.select(self.standIn)
         self.cc.saveState()
 
         keys = pm.keyframe(
-                'testStandin_standInCtrl.controller1scaleX',
+                'testStandin_standInCtrl.controllerAscaleX',
                 q=1,
                 kc=1
                 )
@@ -129,18 +132,24 @@ class testCharacterCrowd:
 
         f = open(cacheFilePath, 'r')
         data = json.load(f)
-        eq_(data["controller1.scaleX"]["value"], 1.9)
+        eq_(data["controllerA.scaleX"]["value"], 1.9)
         f.close()
 
     def testGDuplicateStandin(self):
         self.standIn = pm.ls('testStandin_standInCtrl')[0]
         pm.select(self.standIn)
         self.cc.duplicateStandin()
+        pm.setKeyframe('controllerB.testSrc', t=1, v=1.5)
+        self.cc.saveState()
         # now cache that standin too
         self.cc.cacheStandin()
 
     def testHApplyMeshes(self):
         self.cc.applyMeshes(20)
+        first = pm.getAttr('meshD1Shape.testAttr')
+        second = pm.getAttr('meshD2Shape.testAttr')
+        eq_(first, 0.5)
+        eq_(second, 1.5)
 
     def testIDeleteMeshes(self):
         self.cc.deleteMeshes()
