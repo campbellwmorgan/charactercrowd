@@ -108,9 +108,14 @@ class Source:
         """
         snapshot = {}
         for attr in self.keyable:
+            val = pm.getAttr(attr)
+            # convert vectors into raw type
+            # if possible
+            if getattr(val, 'get', None):
+                val = val.get()
             snapshot[attr] = {
-                "value": pm.getAttr(attr),
-                "type":pm.getAttr(attr, typ=1)
+                "value": val,
+                "type": pm.getAttr(attr, typ=1)
             }
 
         return snapshot
@@ -120,6 +125,10 @@ class Source:
         Loads from a dict object where
         "<attributename>":"<attributeValue>"
         """
+        if not attrHash:
+            raise Exception(
+                    "No saved data for this standin"
+                    )
         for attr, data in attrHash.iteritems():
             pm.setAttr(attr, data["value"])
 

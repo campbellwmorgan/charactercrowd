@@ -71,6 +71,23 @@ class AttributeStore:
             len(obj.listAttr(st=attr)) > 0
         )
 
+    def transferAnimationAttrs(self, src, dest):
+        """
+        When duplicating a standin, transfer across
+        keyed attributes to the new standin
+        """
+        # get animation cache
+        animationKeys = self.getCoreData(
+                src,
+                self.animationAttrName
+                )
+        # iterate through cache
+        # and copy and paste over keys
+        for newName, attr in animationKeys.iteritems():
+            pm.copyKey(src, at=newName)
+            pm.pasteKey(dest, at=newName)
+
+
     def animationAttrs(self, keyedAttrs, node):
         """
         Clears existing animation attrs (on Standin)

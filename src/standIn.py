@@ -53,6 +53,9 @@ class StandIn:
         # for key transforms
         self.sourceKeyTransforms()
 
+        # now save it
+        self.save()
+
         pm.select(self.node)
         return self.node
 
@@ -65,14 +68,19 @@ class StandIn:
         """
         dupe = pm.duplicate(self.node)[0]
         newName = dupe.name()
-        self.source.addChild(newname)
-        self.coreNode.addChild(newname)
+        self.source.addChild(newName)
+        self.coreNode.addChild(newName)
         newStandin = StandIn(
                 coreNode=self.coreNode,
                 source=self.source,
                 node=dupe,
                 ctrlName=self.ctrlName
                 )
+        self.store.transferAnimationAttrs(
+                self.node,
+                dupe
+                )
+
         newStandin.storeMeta()
         newStandin.sourceKeyTransforms()
         pm.select(dupe)

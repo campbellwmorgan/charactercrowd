@@ -132,8 +132,15 @@ class testCharacterCrowd:
         eq_(data["controller1.scaleX"]["value"], 1.9)
         f.close()
 
-    def testApplyMeshes(self):
+    def testGDuplicateStandin(self):
+        self.standIn = pm.ls('testStandin_standInCtrl')[0]
+        pm.select(self.standIn)
+        self.cc.duplicateStandin()
+        # now cache that standin too
+        self.cc.cacheStandin()
+
+    def testHApplyMeshes(self):
         self.cc.applyMeshes(20)
 
-    def testDeleteMeshes(self):
+    def testIDeleteMeshes(self):
         self.cc.deleteMeshes()
