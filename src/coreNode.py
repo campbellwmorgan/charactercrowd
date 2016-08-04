@@ -17,8 +17,7 @@ class CoreNode:
         base = "characterCrowdBase"
         self.store = AttributeStore()
         if pm.objExists(base):
-            pm.select(base)
-            self.node = pm.ls(sl=1)[0]
+            self.node = pm.ls(base)[0]
             self.load()
         else:
             self.node = pm.spaceLocator(
@@ -70,11 +69,17 @@ class CoreNode:
         self.save()
 
     def removeChild(self, childName):
-        self.children.remove(childName)
+        try:
+            self.children.remove(childName)
+        except:
+            ""
         self.save()
 
     def removeParentGroup(self, parentName):
-        self.parents.remove(parentName)
+        try:
+            self.parents.remove(parentName)
+        except:
+            ""
         self.save()
 
     def getNode(self):
@@ -106,14 +111,17 @@ class CoreNode:
                 continue
             child = pm.ls(child)[0]
             meta = self.store.getCoreData(child)
-            snapshot = self.loadCache(
-                    keyFrame,
-                    meta["prefix"],
-                    child
-                )
-            self.applySnapshot(snapshot)
-            # duplicate mesh without history
-            self.duplicateMeshes(meta["meshes"])
+            try:
+                snapshot = self.loadCache(
+                        keyFrame,
+                        meta["prefix"],
+                        child
+                    )
+                self.applySnapshot(snapshot)
+                # duplicate mesh without history
+                self.duplicateMeshes(meta["meshes"])
+            except IOError:
+                print("Cache file for %s not found. Skipping"%child)
 
         # hide the parent meshes
         self.parentVisibility(0)
