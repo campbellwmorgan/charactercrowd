@@ -66,6 +66,18 @@ class Gui:
     def selectKeyable(self, *args):
         # get keyable nodes in hiearchy
         keyable = pm.ls(sl=1)
+        if self.parentItem:
+            # check if parent item in list
+            # add it if not
+            parentFound = False
+            parentName = self.parentItem.name()
+            for key in keyable:
+                if key.name() is parentName:
+                    parentFound = True
+                    continue
+            if not parentFound:
+                keyable.append(self.parentItem)
+
         stringed = self.nameSamples(keyable)
         self.selectedKeyable.setLabel(stringed)
         self.keyable = self.allKeyableAttrs(keyable)

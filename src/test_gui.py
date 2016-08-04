@@ -15,6 +15,7 @@ def test_selectKeyable():
 
     g = TestGui()
 
+    g.parentItem = pm.polyCube()[0]
     firstCube = pm.polyCube()[0]
     secondCube = pm.polyCube()[0]
     g.selectedKeyable = LabelMock()
@@ -25,12 +26,12 @@ def test_selectKeyable():
     eq_(l,2)
     g.selectKeyable()
 
-    eq_("2 (pCube1...)", g.selectedKeyable.text)
+    eq_("3 (pCube2...)", g.selectedKeyable.text)
 
     keyableAttrs = g.keyable
 
-    eq_(len(keyableAttrs), 20)
+    eq_(len(keyableAttrs), 30)
 
-    eq_(str(keyableAttrs[0]), 'pCube1.visibility')
+    eq_(str(keyableAttrs[0]), 'pCube2.visibility')
 
-    pm.delete(firstCube, secondCube)
+    pm.delete(firstCube, secondCube, g.parentItem)
