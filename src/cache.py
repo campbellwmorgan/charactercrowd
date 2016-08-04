@@ -35,7 +35,7 @@ class Cache:
         """
         Gets the base directory for this cacheFile
         """
-        projectRoot = pm.workspace.getPath()
+        projectRoot = os.path.abspath(pm.workspace.getPath())
         cacheDir = os.path.join(
                 projectRoot,
                 'cache',
