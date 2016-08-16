@@ -69,7 +69,7 @@ class CharacterCrowd:
         newStandin = StandIn(
                 coreNode=self.coreNode,
                 source=self.source,
-                ctrlName=(self.source.prefix + "_standInCtrl")
+                prefix=(self.source.prefix)
                 )
         newStandin.create()
 
@@ -83,12 +83,15 @@ class CharacterCrowd:
             raise Exception(
                     "Please select an stand in first"
                     )
-        return StandIn(
+        standIn = StandIn(
                 coreNode=self.coreNode,
-                source=self.source,
                 node=sel[0],
-                ctrlName=(self.source.prefix + "_standInCtrl")
                 )
+        # set the source
+        # and prefix
+        self.source = standIn.source
+        self.prefix = standIn.prefix
+        return standIn
 
     def selectChildren(self, *args):
         pm.select(

@@ -2,6 +2,7 @@ import pymel.core as pm
 from attributeStore import AttributeStore
 from boxGenerator import BoxGenerator
 from cache import Cache
+from source import Source
 
 """
 Abstraction of an individual stand-in
@@ -16,7 +17,7 @@ class StandIn:
             coreNode=False, # root class
             source=False, # parent class
             node=False, # arrow node
-            ctrlName="standInCtrl"
+            prefix="standInCtrl"
             ):
         self.coreNode = coreNode
         self.source = source
@@ -25,7 +26,7 @@ class StandIn:
             self.name = str(node.name())
 
         self.store = AttributeStore()
-        self.ctrlName = ctrlName
+        self.prefix = prefix
         axes = ["X","Y","Z"]
         attrs = ["translate","rotate","scale"]
         self.coreAttrs = []
@@ -35,13 +36,45 @@ class StandIn:
                 self.coreAttrs.append(
                         attr + axis
                         )
+        # check if the source has been
+        # defined, if not load from metadata
+        if not source or not prefix:
+            self.loadSourceFromMeta()
+
+    def loadSourceFromMeta(self):
+        """
+        Loads the source from the
+        node's metadata
+        """
+        meta = self.store.getCoreData(self.node)
+        if not meta:
+            raise Exception(
+                    "Unable to load meta data:" +
+                    "check that parent node exists"
+                    )
+        self.prefix = meta["prefix"]
+        # save the current selection
+        currentSelection = pm.ls(sl=1)
+        # select the source
+        pm.select(meta["source"])
+        if len(pm.ls(sl=1)) is 0:
+            raise Exception(
+                "Source node not found"
+                    )
+        # load the current source
+        # from the selection
+        self.source = Source(selection=True)
+        # load the old selection
+        pm.select(currentSelection)
 
     def create(self):
         """
         Generates the physical box
         """
         generator = BoxGenerator(self.source.node)
-        self.node, self.name = generator.makeCube(self.ctrlName)
+        self.node, self.name = generator.makeCube(
+                self.prefix + "_standInCtrl"
+                )
         # register with source
         self.source.addChild(self.name)
         # register with core node
@@ -74,7 +107,7 @@ class StandIn:
                 coreNode=self.coreNode,
                 source=self.source,
                 node=dupe,
-                ctrlName=self.ctrlName
+                prefix=self.prefix
                 )
         self.store.transferAnimationAttrs(
                 self.node,
