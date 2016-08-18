@@ -78,9 +78,20 @@ class Gui:
             if not parentFound:
                 keyable.append(self.parentItem)
 
-        stringed = self.nameSamples(keyable)
+        newKeyable = []
+        for key in keyable:
+            if isinstance(key, pm.nodetypes.Shape):
+                parent = key.listRelatives(p=1)
+                if parent and len(parent) and isinstance(parent[0], pm.nodetypes.Transform):
+                    newKeyable.append(parent[0])
+                else:
+                    print("Skipped item:" + key.name())
+            else:
+                newKeyable.append(key)
+
+        stringed = self.nameSamples(newKeyable)
         self.selectedKeyable.setLabel(stringed)
-        self.keyable = self.allKeyableAttrs(keyable)
+        self.keyable = self.allKeyableAttrs(newKeyable)
 
 
     def allKeyableAttrs(self, keyable):
