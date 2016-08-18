@@ -62,6 +62,8 @@ class CharacterCrowd:
         AND adds the name of this new generated mesh to a string
         attribute on the original mesh
         """
+        # try loading it from selection
+        self.load()
         if not self.source:
             raise Exception(
                     "Must load or setup Source object first"
