@@ -98,6 +98,8 @@ class CoreNode:
         to the source object, then duplicates
         the meshes at that position
         """
+        # remove previous meshes
+        self.deleteMeshes()
         # create a group for duplicate meshes
         if not self.meshGroup:
             meshGroup = pm.group(em=1,n="meshCache_" + str(keyFrame))
