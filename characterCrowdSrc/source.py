@@ -115,7 +115,6 @@ class Source:
                 val = val.get()
             snapshot[attr] = {
                 "value": val,
-                "type": pm.getAttr(attr, typ=1)
             }
 
         return snapshot
