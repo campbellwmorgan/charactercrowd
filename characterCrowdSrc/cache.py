@@ -3,6 +3,7 @@ Manages the cache storage
 and retrieval for a given character
 """
 import json
+import gzip
 import pymel.core as pm
 import os
 
@@ -17,18 +18,23 @@ class Cache:
         """
         Finds file and encodes json
         """
-        f = open(self.getFilePath(frameNo), 'w')
-        json.dump(data, f)
-        f.close()
+        with gzip.GzipFile(self.getFilePath(frameNo), 'w') as f:
+            f.write(json.dumps(data))
+            f.close()
         return True
 
     def fetch(self, frameNo):
         """
         Finds file and reads json data
         """
-        f = open(self.getFilePath(frameNo), 'r')
-        data = json.load(f)
-        f.close()
+        with gzip.GzipFile(self.getFilePath(frameNo), 'r') as lines:
+            data = False
+            for line in lines:
+                data = json.loads(line)
+                break
+            lines.close()
+        if not data:
+            raise Exception("No lines in file")
         return data
 
     def getBaseDir(self):
@@ -53,7 +59,7 @@ class Cache:
         return cacheDir
 
     def getFileName(self, frameNo):
-        return self.fileName + ".cache." + str(frameNo).zfill(4) + ".json"
+        return self.fileName + ".cache." + str(frameNo).zfill(4) + ".json.gz"
 
     def getFilePath(self, frameNo):
         return os.path.join(

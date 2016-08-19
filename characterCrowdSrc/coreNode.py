@@ -124,6 +124,8 @@ class CoreNode:
                 self.duplicateMeshes(meta["meshes"])
             except IOError:
                 print("Cache file for %s not found. Skipping"%child)
+            except:
+                print("Cache file read error for %s. Skipping"%child)
 
         # hide the parent meshes
         self.parentVisibility(0)

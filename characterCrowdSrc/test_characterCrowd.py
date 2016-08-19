@@ -3,6 +3,7 @@ import pymel.core as pm
 import shutil
 import os
 import json
+import gzip
 from characterCrowd import CharacterCrowd
 from gui import Gui
 
@@ -126,12 +127,14 @@ class testCharacterCrowd:
                 'characterCrowd',
                 'testStandin',
                 'testStandin_standInCtrl',
-                'testStandin_standInCtrl.cache.0042.json'
+                'testStandin_standInCtrl.cache.0042.json.gz'
                 )
 
 
-        f = open(cacheFilePath, 'r')
-        data = json.load(f)
+        f = gzip.GzipFile(cacheFilePath, 'r')
+        for line in f:
+            data = json.loads(line)
+            break
         eq_(data["controllerA.scaleX"]["value"], 1.9)
         f.close()
 
