@@ -7,7 +7,7 @@ See README for installation instructions and usage
 from pymel.api.plugins import Command
 import maya.OpenMayaMPx as OpenMayaMPx
 
-from src.characterCrowd import gui, preRender, postRender
+from characterCrowdSrc.characterCrowd import gui, preRender, postRender
 
 class characterCrowdGui(Command):
     def doIt(self, *args):
