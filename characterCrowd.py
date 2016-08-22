@@ -10,32 +10,32 @@ import maya.OpenMayaMPx as OpenMayaMPx
 from characterCrowdSrc.characterCrowd import *
 
 class characterCrowdGui(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         print("loading gui...")
         gui()
 
 class ccPreRenderFrame(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         preRender()
 
 class ccPostRenderFrame(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         postRender()
 
 class ccGenerate(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         generateStandin()
 
 class ccDuplicate(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         duplicateStandin()
 
 class ccSave(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         saveStandin()
 
 class ccEdit(Command):
-    def doIt(self, *args):
+    def doIt(self, args):
         editStandin()
 
 class ccCache(Command):
@@ -53,6 +53,7 @@ def initializePlugin(mobject):
     ccSave.register()
     ccEdit.register()
     ccCache.register()
+    ccSelectAll.register()
     print("Loaded CharacterCrowd")
 
 # uninitialize the script plug-in
@@ -66,4 +67,5 @@ def uninitializePlugin(mobject):
     ccSave.deregister()
     ccEdit.deregister()
     ccCache.deregister()
+    ccSelectAll.deregister()
     print("Unloaded CharacterCrowd")
