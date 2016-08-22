@@ -186,7 +186,7 @@ class CoreNode:
                 revs = pm.listConnections(con, d=1,s=0,p=1)
                 for rev in revs:
                     # get attribute to force update
-                    pm.getAttr(rev)
+                    pm.getAttr(rev, sl=1)
 
 
     def duplicateMeshes(self, meshes):
