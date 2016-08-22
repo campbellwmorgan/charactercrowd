@@ -41,6 +41,10 @@ class ccEdit(Command):
 class ccCache(Command):
     def doIt(self, *args):
         cacheStandin()
+class ccSelectAll(Command):
+    def doIt(self, args):
+        selectAllStandins()
+
 
 ## initialize the script plug-in
 def initializePlugin(mobject):

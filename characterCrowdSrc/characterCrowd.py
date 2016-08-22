@@ -140,6 +140,12 @@ class CharacterCrowd:
         standIn = self.getStandInFromSelection()
         standIn.delete()
 
+    def selectAll(self, *args):
+        """
+        Select every standin in the current scene
+        """
+        pm.select(self.coreNode.children)
+
     def applyMeshes(self, keyFrame=False):
         """
         Iterates through every standin found in
@@ -213,6 +219,10 @@ def editStandin():
 def cacheStandin():
     c = CharacterCrowd(createUI=False)
     c.cacheStandin()
+
+def selectAllStandins():
+    c = CharacterCrowd(createUI=False)
+    c.selectAll()
 
 
 
