@@ -194,5 +194,28 @@ def postRender():
     c = CharacterCrowd(createUI=False)
     c.deleteMeshes()
 
+def generateStandin():
+    c = CharacterCrowd(createUI=False)
+    c.generate()
+
+def duplicateStandin():
+    c = CharacterCrowd(createUI=False)
+    c.duplicate()
+
+def saveStandin():
+    c = CharacterCrowd(createUI=False)
+    c.saveState()
+
+def editStandin():
+    c = CharacterCrowd(createUI=False)
+    c.focusModel()
+
+def cacheStandin():
+    c = CharacterCrowd(createUI=False)
+    c.cacheStandin()
+
+
+
+
 
 

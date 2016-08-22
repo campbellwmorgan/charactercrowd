@@ -7,7 +7,7 @@ See README for installation instructions and usage
 from pymel.api.plugins import Command
 import maya.OpenMayaMPx as OpenMayaMPx
 
-from characterCrowdSrc.characterCrowd import gui, preRender, postRender
+from characterCrowdSrc.characterCrowd import *
 
 class characterCrowdGui(Command):
     def doIt(self, *args):
@@ -22,6 +22,25 @@ class ccPostRenderFrame(Command):
     def doIt(self, *args):
         postRender()
 
+class ccGenerate(Command):
+    def doIt(self, *args):
+        generateStandin()
+
+class ccDuplicate(Command):
+    def doIt(self, *args):
+        duplicateStandin()
+
+class ccSave(Command):
+    def doIt(self, *args):
+        saveStandin()
+
+class ccEdit(Command):
+    def doIt(self, *args):
+        editStandin()
+
+class ccCache(Command):
+    def doIt(self, *args):
+        cacheStandin()
 
 ## initialize the script plug-in
 def initializePlugin(mobject):
@@ -29,6 +48,11 @@ def initializePlugin(mobject):
     characterCrowdGui.register()
     ccPreRenderFrame.register()
     ccPostRenderFrame.register()
+    ccGenerate.register()
+    ccDuplicate.register()
+    ccSave.register()
+    ccEdit.register()
+    ccCache.register()
     print("Loaded CharacterCrowd")
 
 # uninitialize the script plug-in
@@ -37,4 +61,9 @@ def uninitializePlugin(mobject):
     characterCrowdGui.deregister()
     ccPreRenderFrame.deregister()
     ccPostRenderFrame.deregister()
+    ccGenerate.deregister()
+    ccDuplicate.deregister()
+    ccSave.deregister()
+    ccEdit.deregister()
+    ccCache.deregister()
     print("Unloaded CharacterCrowd")
