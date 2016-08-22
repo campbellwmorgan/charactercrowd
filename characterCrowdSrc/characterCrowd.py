@@ -116,7 +116,7 @@ class CharacterCrowd:
         standIn = self.getStandInFromSelection()
         standIn.save()
 
-    def cacheStandin(self, *args):
+    def cacheStandin(self, startFrame=False, endFrame=False, *args):
         """
         Iterates through all the frames in the
         current range saving all the selected attributes
@@ -124,7 +124,10 @@ class CharacterCrowd:
         """
         standIn = self.getStandInFromSelection()
         standIn.focus()
-        standIn.cache()
+        if isinstance(startFrame, int):
+            standIn.cache(startFrame, endFrame)
+        else:
+            standIn.cache()
 
     def duplicateStandin(self, *args):
         """
@@ -216,9 +219,9 @@ def editStandin():
     c = CharacterCrowd(createUI=False)
     c.focusModel()
 
-def cacheStandin():
+def cacheStandin(start=False, end=False):
     c = CharacterCrowd(createUI=False)
-    c.cacheStandin()
+    c.cacheStandin(start,end)
 
 def selectAllStandins():
     c = CharacterCrowd(createUI=False)

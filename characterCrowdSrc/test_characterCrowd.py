@@ -118,7 +118,7 @@ class testCharacterCrowd:
     def testFCacheStandin(self):
         self.standIn = pm.ls('testStandin_standInCtrl')[0]
         pm.select(self.standIn)
-        self.cc.cacheStandin()
+        self.cc.cacheStandin(1,44)
 
         # check json file for frame
         cacheFilePath = os.path.join(

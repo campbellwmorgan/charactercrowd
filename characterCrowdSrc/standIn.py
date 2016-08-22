@@ -224,7 +224,7 @@ class StandIn:
         # from the keys
         self.store.loadStoredKeys(self.node)
 
-    def cache(self):
+    def cache(self, fromFrame=False,toFrame=False):
         """
         Iterates through each frame in the
         frame range and saves the state to
@@ -235,9 +235,9 @@ class StandIn:
                 self.name
                 )
 
-        startFrame = int(pm.playbackOptions(q=1,ast=1))
-        endFrame = int(pm.playbackOptions(q=1,aet=1))
-        for frame in range(startFrame, endFrame + 1):
+        startFrame = fromFrame if fromFrame else int(pm.playbackOptions(q=1,ast=1))
+        endFrame = toFrame if toFrame else (int(pm.playbackOptions(q=1,aet=1)) + 1)
+        for frame in range(startFrame, endFrame):
             # go to current frame
             pm.currentTime(frame)
             # get the snapshot for this frame

@@ -39,8 +39,19 @@ class ccEdit(Command):
         editStandin()
 
 class ccCache(Command):
-    def doIt(self, *args):
-        cacheStandin()
+    def doIt(self, args):
+        """
+        Usage: ccCache # caches selected entire frame range
+        ccCache 2 5 # caches selected from frame 2 to 5
+        """
+        if args.length() is 0:
+            return cacheStandin()
+
+        else:
+            startFrame = args.asInt(0)
+            endFrame = args.asInt(1)
+            cacheStandin(startFrame, endFrame)
+
 class ccSelectAll(Command):
     def doIt(self, args):
         selectAllStandins()
