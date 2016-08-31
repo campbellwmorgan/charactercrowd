@@ -188,6 +188,22 @@ class CoreNode:
                     # get attribute to force update
                     pm.getAttr(rev, sl=1)
 
+    def aiMeshLightDupe(self, orig, dupe):
+        """
+        Sets the object as a mesh light
+        if the previous object was a mesh light
+        (bug in arnold changes dupes to polymesh)
+        """
+        relatives = pm.listRelatives(orig,c=1)
+        for m in relatives:
+            if len(pm.listAttr(m, st='aiTranslator')) is 0:
+                continue
+            if str(m.getAttr('aiTranslator')) is not 'mesh_light':
+                continue
+            for d in pm.listRelatives(dupe, c=1):
+                if len(pm.listAttr(m, st='aiTranslator')) is 0:
+                    continue
+                d.setAttr('aiTranslator', 'mesh_light')
 
     def duplicateMeshes(self, meshes):
         #pm.dgeval('meshDShape.testAttr')
@@ -198,5 +214,7 @@ class CoreNode:
             self.forceDGEval(mesh)
             # now duplicate
             dupe = pm.duplicate(mesh)[0]
+            # update mesh_light settings
+            self.aiMeshLightDupe(mesh, dupe)
             # add to mesh group
             pm.parent(dupe, self.meshGroup)
