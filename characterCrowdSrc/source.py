@@ -32,7 +32,6 @@ class Source:
             self.children = []
             self.save()
 
-
     def node(self):
         return self.node
 
@@ -118,6 +117,20 @@ class Source:
             }
 
         return snapshot
+
+    def addKeyableAttrs(self, attrs):
+        """
+        Adds to list of keyable
+        attributes
+        """
+        # iterate through current new attrs
+        # check whether already included
+        # and then add them if not
+        for attr in attrs:
+            if attr in self.keyable:
+                continue
+            self.keyable.append(attr)
+        self.save()
 
     def loadSnapshot(self, attrHash):
         """

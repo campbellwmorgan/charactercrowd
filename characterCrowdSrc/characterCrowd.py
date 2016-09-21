@@ -170,6 +170,16 @@ class CharacterCrowd:
         """
         self.coreNode.deleteMeshes()
 
+    def appendNewKeys(self, source, newAttrs):
+        """
+        Appends keys from selected nodes to standin
+        """
+        # select the source
+        pm.select(source)
+        # load the source data
+        self.load()
+        self.source.addKeyableAttrs(newAttrs)
+
     def createUI(self):
         """
         Creates the interaction Gui
@@ -183,7 +193,8 @@ class CharacterCrowd:
             editCurrent=self.focusModel,
             saveCurrent=self.saveState,
             selectChildren=self.selectChildren,
-            cacheSelected=self.cacheStandin
+            cacheSelected=self.cacheStandin,
+            appendKeys=self.appendNewKeys
         )
 
     def setupCoreNode(self):

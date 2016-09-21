@@ -15,6 +15,7 @@ class Gui:
             saveCurrent=empty,
             selectChildren=empty,
             cacheSelected=empty,
+            appendKeys=empty,
             ):
         # executes the setup of a given controller
         # takes params: item, meshes=[], keyable=[], prefix=''
@@ -37,6 +38,9 @@ class Gui:
         self.selectChildrenFunc = selectChildren
         # caches selected item for current active time frame
         self.cacheSelectedFunc = cacheSelected
+        # append keyable attrs
+        # to currently selected standin
+        self.appendKeysFunc = appendKeys
 
         self.parentItem = False
         self.parentVisItem = False
@@ -92,6 +96,17 @@ class Gui:
         stringed = self.nameSamples(newKeyable)
         self.selectedKeyable.setLabel(stringed)
         self.keyable = self.allKeyableAttrs(newKeyable)
+
+    def appendSelectedAttrs(self, *args):
+        """
+        Appends keyable attrs from selected nodes
+        """
+        sel = pm.ls(sl=1)
+        if len(sel) < 2:
+            raise Exception("Please select the source and at least one item")
+        source = sel[0]
+        attrs = self.allKeyableAttrs(sel[1:])
+        self.appendKeysFunc(source, attrs)
 
 
     def allKeyableAttrs(self, keyable):
@@ -204,6 +219,7 @@ class Gui:
         pm.button(l="Duplicate Selected Stand-in", p=parentLayout,h=20,w=width, command=self.duplicateFunc)
         pm.button(l="Select All Stan-ins ", p=parentLayout,h=20,w=width, command=self.selectChildrenFunc)
         pm.button(l="Cache Selected", p=parentLayout,h=20,w=width, command=self.cacheSelectedFunc)
+        pm.button(label="Add Keyables", p=parentLayout, h=20, w=width, command=self.appendSelectedAttrs)
 
         self.win.setWidth(width)
 
