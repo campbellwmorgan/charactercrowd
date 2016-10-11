@@ -105,6 +105,9 @@ class CoreNode:
             meshGroup = pm.group(em=1,n="meshCache_" + str(keyFrame))
         self.storeMeshGroup(meshGroup.name())
 
+        if pm.objExists("characterCrowdMeshGroup"):
+            pm.parent(self.meshGroup, "characterCrowdMeshGroup")
+
         children, parents = self.load()
         for child in children:
             # ignore any children not found
@@ -218,3 +221,15 @@ class CoreNode:
             self.aiMeshLightDupe(mesh, dupe)
             # add to mesh group
             pm.parent(dupe, self.meshGroup)
+            # add mesh to any sets
+            self.checkSetsAndAdd(mesh, dupe)
+
+    def checkSetsAndAdd(self, mesh, duplicate):
+        """
+        Checks if the mesh belongs to any set
+        then adds duplicate to the same set
+        """
+        sets = pm.listSets(o=mesh)
+        for objectSet in sets:
+            objectSet.add(duplicate)
+
