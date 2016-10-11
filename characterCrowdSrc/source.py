@@ -1,5 +1,6 @@
 import pymel.core as pm
 from attributeStore import AttributeStore
+from exceptions import CCCoreException
 
 class Source:
     """
@@ -42,7 +43,7 @@ class Source:
         """
         sel = pm.ls(sl=1)
         if not len(sel) is 1:
-            raise Exception(
+            raise CCCoreException(
                     "Must have a node selected"
                     )
         node = sel[0]
@@ -50,7 +51,7 @@ class Source:
         data = self.store.getCoreData(node)
         children = self.store.getChildren(node)
         if not data:
-            raise Exception(
+            raise CCCoreException(
                     "No data found on node"
                     )
 
@@ -67,7 +68,7 @@ class Source:
         to attributes
         """
         if not self.node:
-            raise Exception(
+            raise CCCoreException(
                     "Must provide valid source node"
                     )
         self.store.storeCoreData(self.node, self.coreData())
@@ -138,7 +139,7 @@ class Source:
         "<attributename>":"<attributeValue>"
         """
         if not attrHash:
-            raise Exception(
+            raise CCCoreException(
                     "No saved data for this standin"
                     )
         for attr, data in attrHash.iteritems():

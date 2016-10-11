@@ -6,6 +6,7 @@ from source import Source
 from coreNode import CoreNode
 from standIn import StandIn
 from datetime import datetime
+from exceptions import CCCoreException
 
 class CharacterCrowd:
 
@@ -65,7 +66,7 @@ class CharacterCrowd:
         # try loading it from selection
         self.load()
         if not self.source:
-            raise Exception(
+            raise CCCoreException(
                     "Must load or setup Source object first"
                     )
         newStandin = StandIn(
@@ -82,7 +83,7 @@ class CharacterCrowd:
         """
         sel = pm.ls(sl=1)
         if len(sel) is not 1:
-            raise Exception(
+            raise CCCoreException(
                     "Please select an stand in first"
                     )
         standIn = StandIn(
@@ -193,7 +194,7 @@ class CharacterCrowd:
             editCurrent=self.focusModel,
             saveCurrent=self.saveState,
             selectChildren=self.selectChildren,
-            cacheSelected=self.cacheStandin,
+            cacheSelected=cacheStandin,
             appendKeys=self.appendNewKeys
         )
 

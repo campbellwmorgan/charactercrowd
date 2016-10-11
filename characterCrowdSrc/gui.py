@@ -1,4 +1,6 @@
 import pymel.core as pm
+from exceptions import *
+
 def empty(*args):
     print(args)
 
@@ -51,22 +53,25 @@ class Gui:
         # set init states
         self.createUI()
 
+    @wrapper
     def selectParent(self, *args):
         # get selected
         sel = pm.ls(sl=1)
         if len(sel) is not 1:
-            raise Exception("Parent must be a single item")
+            raise CCGuiException("Parent must be a single item")
         self.parentItem = sel[0]
         self.mainCharacter.setLabel(str(self.parentItem.name()))
 
+    @wrapper
     def selectParentVis(self, *args):
         # get selected
         sel = pm.ls(sl=1)
         if len(sel) is not 1:
-            raise Exception("Parent Vis must be a single item")
+            raise CCGuiException("Parent Vis must be a single item")
         self.parentVisItem = sel[0]
         self.parentVis.setLabel(str(self.parentVisItem.name()))
 
+    @wrapper
     def selectKeyable(self, *args):
         # get keyable nodes in hiearchy
         keyable = pm.ls(sl=1)
@@ -97,13 +102,14 @@ class Gui:
         self.selectedKeyable.setLabel(stringed)
         self.keyable = self.allKeyableAttrs(newKeyable)
 
+    @wrapper
     def appendSelectedAttrs(self, *args):
         """
         Appends keyable attrs from selected nodes
         """
         sel = pm.ls(sl=1)
         if len(sel) < 2:
-            raise Exception("Please select the source and at least one item")
+            raise CCGuiException("Please select the source and at least one item")
         source = sel[0]
         attrs = self.allKeyableAttrs(sel[1:])
         self.appendKeysFunc(source, attrs)
@@ -129,11 +135,13 @@ class Gui:
             [obj.name() for obj in iterable[0:upper]]
         ) + "...)"
 
+    @wrapper
     def selectMeshes(self, *args):
         self.meshes = pm.ls(sl=1)
         stringed = self.nameSamples(self.meshes)
         self.selectedMeshes.setLabel(stringed)
 
+    @wrapper
     def storePrefix(self, *args):
         self.prefix = self.uniquePrefixField.getText()
         self.setupGui.setCollapse(True)
@@ -152,6 +160,7 @@ class Gui:
                     button=["OK"]
                     )
 
+    @wrapper
     def loadFromSelected(self, *args):
         # collapse the setup tab
         self.setupGui.setCollapse(True)
@@ -196,11 +205,16 @@ class Gui:
                 mh=20
                 )
 
-        pm.button(label="Load from Selected",p=load,command=self.loadFromSelected)
+        pm.button(
+                label="Load from Selected",
+                p=load,
+                command=self.loadFromSelected
+        )
 
         setupContainer.setCollapse(True)
         return setupContainer
 
+    @wrapper
     def createUI(self):
         width =200
         self.win = pm.window(title="Character Crowd")
@@ -210,16 +224,64 @@ class Gui:
         self.setupGui = self.setupUI(parentLayout, width)
 
         # create main buttons
-        pm.button(l="Generate Stand-in",p=parentLayout,h=20,w=width,command=self.generateFunc)
+        pm.button(
+                l="Generate Stand-in",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.generateFunc
+        )
         # deletes the current standin
-        pm.button(l="Delete Stand-in",p=parentLayout,h=20,w=width,command=self.deleteFunc)
+        pm.button(
+                l="Delete Stand-in",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.deleteFunc
+        )
 
-        pm.button(l="Edit Selected Stand-in", p=parentLayout,h=20,w=width, command=self.editCurrentFunc)
-        pm.button(l="Save Selected Stand-in", p=parentLayout,h=20,w=width, command=self.saveCurrentFunc)
-        pm.button(l="Duplicate Selected Stand-in", p=parentLayout,h=20,w=width, command=self.duplicateFunc)
-        pm.button(l="Select All Stan-ins ", p=parentLayout,h=20,w=width, command=self.selectChildrenFunc)
-        pm.button(l="Cache Selected", p=parentLayout,h=20,w=width, command=self.cacheSelectedFunc)
-        pm.button(label="Add Keyables", p=parentLayout, h=20, w=width, command=self.appendSelectedAttrs)
+        pm.button(
+                l="Edit Selected Stand-in",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.editCurrentFunc
+        )
+        pm.button(
+                l="Save Selected Stand-in",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.saveCurrentFunc
+        )
+        pm.button(
+                l="Duplicate Selected Stand-in",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.duplicateFunc
+        )
+        pm.button(
+                l="Select All Stan-ins ",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.selectChildrenFunc
+        )
+        pm.button(
+                l="Cache Selected",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.cacheSelectedFunc
+        )
+        pm.button(
+                label="Add Keyables",
+                p=parentLayout,
+                h=20,
+                w=width,
+                command=self.appendSelectedAttrs
+        )
 
         self.win.setWidth(width)
 

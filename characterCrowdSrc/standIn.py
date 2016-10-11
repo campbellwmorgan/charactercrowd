@@ -3,6 +3,7 @@ from attributeStore import AttributeStore
 from boxGenerator import BoxGenerator
 from cache import Cache
 from source import Source
+from exceptions import CCCoreException
 
 """
 Abstraction of an individual stand-in
@@ -48,7 +49,7 @@ class StandIn:
         """
         meta = self.store.getCoreData(self.node)
         if not meta:
-            raise Exception(
+            raise CCCoreException(
                     "Unable to load meta data:" +
                     "check that parent node exists"
                     )
@@ -58,7 +59,7 @@ class StandIn:
         # select the source
         pm.select(meta["source"])
         if len(pm.ls(sl=1)) is 0:
-            raise Exception(
+            raise CCCoreException(
                 "Source node not found"
                     )
         # load the current source
@@ -230,19 +231,23 @@ class StandIn:
         frame range and saves the state to
         a cache file on the hard drive
         """
-        cacher = Cache(
-                self.source.prefix,
-                self.name
-                )
+        # turn undo off
+        pm.undoInfo( state=False )
 
         startFrame = fromFrame if fromFrame else int(pm.playbackOptions(q=1,ast=1))
         endFrame = toFrame if toFrame else (int(pm.playbackOptions(q=1,aet=1)) + 1)
         for frame in range(startFrame, endFrame):
+            cacher = Cache(
+                    self.source.prefix,
+                    self.name
+                    )
             # go to current frame
             pm.currentTime(frame)
+            pm.refresh(cv=1)
             # get the snapshot for this frame
             snapshot = self.source.getSnapshot()
             cacher.store(frame, snapshot)
-
+        # turn it back on again
+        pm.undoInfo( state=True )
         return True
 

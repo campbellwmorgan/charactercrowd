@@ -98,25 +98,28 @@ class AttributeStore:
         animationAttrs = {}
 
         for attr in keyedAttrs:
-            # santize the name
-            newName = self.processAttrName(attr)
-            # get the attribute type
-            # from the original
-            attrType = str(pm.getAttr(attr, typ=1))
-            attrVal = pm.getAttr(attr)
-            # create new attribute
-            if dt.isAt(str(attrType)):
-                node.addAttr(newName, at=attrType, k=1)
-            else:
-                node.addAttr(newName, dt=attrType, k=1)
+            try:
+                # santize the name
+                newName = self.processAttrName(attr)
+                # get the attribute type
+                # from the original
+                attrType = str(pm.getAttr(attr, typ=1))
+                attrVal = pm.getAttr(attr)
+                # create new attribute
+                if dt.isAt(str(attrType)):
+                    node.addAttr(newName, at=attrType, k=1)
+                else:
+                    node.addAttr(newName, dt=attrType, k=1)
 
-            # add to data map
-            animationAttrs[newName] = attr
+                # add to data map
+                animationAttrs[newName] = attr
 
-            # copy keys from original to new attribute
-            elms = attr.split(".")
-            copyRes = pm.copyKey(elms[0], at=elms[1])
-            pm.pasteKey(node,at=newName)
+                # copy keys from original to new attribute
+                elms = attr.split(".")
+                copyRes = pm.copyKey(elms[0], at=elms[1])
+                pm.pasteKey(node,at=newName)
+            except:
+                print("Failed to store animation attribute " + str(attr))
 
         # write the dict to object
         self.storeCoreData(
