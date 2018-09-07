@@ -1,9 +1,9 @@
-#Character Crowd
+# Character Crowd
 
 Animate and render large number of complex rigs
 without overloading your GPU
 
-##Why
+## Why
 
 If you already have finished rigs and do not want to have
 to re-rig them to fit the constraints of one of the few popular
@@ -17,7 +17,7 @@ Importantly:
 * you don't have to load heavy blendshapes/skinning information into memory more than once
 
 
-##How
+## How
 
 1. Start with a referenced rig
 
@@ -38,7 +38,7 @@ select the standin node (arrow) then click "Edit Stand-in" and the reference rig
 8. Render away and the standins will be replaced with the mesh animated
 
 
-##Installation
+## Installation
 
 Copy / Git clone this repo to your maya plugins folder
 
@@ -51,13 +51,13 @@ Add `ccPreRenderFrame` to PostRenderFrameMEL
 and `ccPostRenderFrame` to PostRenderFrameMEL in your file's
 render settings
 
-##Running the unit tests
+## Running the unit tests
 
 `easy-install nose`
 
 `<MAYA PYTHON PATH> ./src/runTests.py`
 
-##LICENSE
+## LICENSE
 
 Copyright 2016, Campbell Morgan
 
